@@ -1,12 +1,10 @@
 #include <stdio.h>
 
 #define INF 99999
-#define V 4 // Number of vertices in the graph
+#define V 4
 
-// Function to print the solution matrix
 void printSolution(int dist[][V]) {
-    printf("The following matrix shows the shortest distances"
-           " between every pair of vertices:\n");
+    printf("The following matrix shows the shortest distances between every pair of vertices:\n");
     for (int i = 0; i < V; i++) {
         for (int j = 0; j < V; j++) {
             if (dist[i][j] == INF)
@@ -18,16 +16,13 @@ void printSolution(int dist[][V]) {
     }
 }
 
-// Floyd Warshall algorithm
 void floydWarshall(int graph[][V]) {
     int dist[V][V];
 
-    // Initialize distance matrix
     for (int i = 0; i < V; i++)
         for (int j = 0; j < V; j++)
             dist[i][j] = graph[i][j];
 
-    // Update distance matrix considering all intermediate vertices
     for (int k = 0; k < V; k++) {
         for (int i = 0; i < V; i++) {
             for (int j = 0; j < V; j++) {
@@ -37,7 +32,6 @@ void floydWarshall(int graph[][V]) {
         }
     }
 
-    // Print the solution
     printSolution(dist);
 }
 
