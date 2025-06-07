@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-
-void swap(int* a, int* b) { int t = *a; *a = *b; *b = t; }
-
+void swap(int* a, int* b) { 
+int t = *a; *a = *b; *b = t; 
+}
 int partition(int arr[], int low, int high) {
     int pivot = arr[high], i = low - 1;
     for (int j = low; j < high; j++)
