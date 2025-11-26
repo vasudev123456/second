@@ -1,33 +1,78 @@
-#include <stdio.h>
-
-int max(int a, int b) {
-    return (a > b) ? a : b;
-}
-
-int knapSack(int W, int wt[], int val[], int n) {
-    int i, w;
-    int K[n + 1][W + 1];
-
-    for (i = 0; i <= n; i++) {
-        for (w = 0; w <= W; w++) {
-            if (i == 0 || w == 0)
-                K[i][w] = 0;
-            else if (wt[i - 1] <= w)
-                K[i][w] = max(val[i - 1] + K[i - 1][w - wt[i - 1]], K[i - 1][w]);
-            else
-                K[i][w] = K[i - 1][w];
-        }
-    }
-
-    return K[n][W];
-}
-
-int main() {
-    int val[] = {60, 100, 120};
-    int wt[] = {10, 20, 30};
-    int W = 50;
-    int n = sizeof(val) / sizeof(val[0]);
-
-    printf("Maximum value that can be obtained: %d\n", knapSack(W, wt, val, n));
-    return 0;
+import java.util.Scanner; 
+public class ford 
+{  
+private int D[];  
+private int num_ver;  
+public static final int MAX_VALUE = 999;  
+public ford(int num_ver) 
+{  
+}  
+this.num_ver = num_ver;  
+D = new int[num_ver + 1]; 
+public void BellmanFordEvaluation(int source, int A[][]) 
+{ 
+for (int node = 1; node <= num_ver; node++)  
+{  
+D[node] = MAX_VALUE; 
+} 
+D[source] = 0; 
+for (int node = 1; node <= num_ver - 1; node++)  
+{ 
+for (int sn = 1; sn <= num_ver; sn++) 
+{ 
+for (int dn = 1; dn <= num_ver; dn++) 
+{ 
+if (A[sn][dn] != MAX_VALUE)  
+{  
+} 
+if (D[dn] > D[sn]+ A[sn][dn])  
+D[dn] = D[sn] + A[sn][dn]; 
+}  
+} 
+}  
+} 
+for (int sn = 1; sn <= num_ver; sn++) 
+{ 
+} 
+for (int dn = 1; dn <= num_ver; dn++)  
+{  
+}  
+if (A[sn][dn] != MAX_VALUE) 
+{ 
+}  
+if (D[dn] > D[sn]+ A[sn][dn]) 
+System.out.println("The Graph contains negative egde cycle"); 
+for (int vertex = 1; vertex <= num_ver; vertex++) 
+{  
+}  
+System.out.println("distance of source"+source+"to"+vertex+"is" + D[vertex]); 
+public static void main(String[ ] args) 
+{ 
+int num_ver = 0;  
+int source; 
+Scanner scanner = new Scanner(System.in); 
+System.out.println("Enter the number of vertices");  
+num_ver = scanner.nextInt();  
+int A[][] = new int[num_ver + 1][num_ver + 1];  
+System.out.println("Enter the adjacency matrix");  
+for (int sn = 1; sn <= num_ver; sn++)  
+{  
+for (int dn = 1; dn <= num_ver; dn++)  
+{ 
+A[sn][dn] = scanner.nextInt();  
+if (sn == dn) { A[sn][dn] = 0; 
+continue; 
+}  
+if (A[sn][dn] == 0) 
+{ 
+}  
+}  
+}  
+A[sn][dn] = MAX_VALUE;  
+System.out.println("Enter the source vertex"); 
+source = scanner.nextInt(); 
+ford b = new ford (num_ver); 
+b.BellmanFordEvaluation(source, A); 
+scanner.close(); 
+} 
 }
