@@ -1,52 +1,69 @@
-import java.util.*;
+import java.util.Scanner;
 
-public class BellmanFord {
-    static final int INF = 999;
+public class ford {
+    private int D[];
+    private int num_ver;
+    public static final int MAX_VALUE = 999;
 
-    void bellman(int src, int[][] graph, int n) {
-        int[] dist = new int[n + 1];
-        Arrays.fill(dist, INF);
-        dist[src] = 0;
+    public ford(int num_ver) {
+        this.num_ver = num_ver;
+        D = new int[num_ver + 1];
+    }
 
-        for (int k = 1; k < n; k++) {
-            for (int i = 1; i <= n; i++) {
-                for (int j = 1; j <= n; j++) {
-                    if (graph[i][j] != INF && dist[i] + graph[i][j] < dist[j])
-                        dist[j] = dist[i] + graph[i][j];
+    public void BellmanFordEvaluation(int source, int A[][]) {
+        for (int node = 1; node <= num_ver; node++)
+            D[node] = MAX_VALUE;
+
+        D[source] = 0;
+
+        for (int node = 1; node <= num_ver - 1; node++) {
+            for (int sn = 1; sn <= num_ver; sn++) {
+                for (int dn = 1; dn <= num_ver; dn++) {
+                    if (A[sn][dn] != MAX_VALUE) {
+                        if (D[dn] > D[sn] + A[sn][dn])
+                            D[dn] = D[sn] + A[sn][dn];
+                    }
                 }
             }
         }
 
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                if (graph[i][j] != INF && dist[i] + graph[i][j] < dist[j]) {
-                    System.out.println("Graph contains negative edge cycle");
+        // Check for negative edge cycle
+        for (int sn = 1; sn <= num_ver; sn++) {
+            for (int dn = 1; dn <= num_ver; dn++) {
+                if (A[sn][dn] != MAX_VALUE && D[dn] > D[sn] + A[sn][dn]) {
+                    System.out.println("The Graph contains negative edge cycle");
                     return;
                 }
             }
         }
 
-        for (int i = 1; i <= n; i++)
-            System.out.println("Distance from " + src + " to " + i + " = " + dist[i]);
+        // Display results
+        for (int vertex = 1; vertex <= num_ver; vertex++)
+            System.out.println("Distance of source " + source + " to " + vertex + " is " + D[vertex]);
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter number of vertices: ");
-        int n = sc.nextInt();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of vertices: ");
+        int num_ver = scanner.nextInt();
 
-        int[][] graph = new int[n + 1][n + 1];
-        System.out.println("Enter adjacency matrix (0 for no edge):");
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                graph[i][j] = sc.nextInt();
-                if (i != j && graph[i][j] == 0) graph[i][j] = INF;
+        int A[][] = new int[num_ver + 1][num_ver + 1];
+        System.out.println("Enter the adjacency matrix:");
+        for (int sn = 1; sn <= num_ver; sn++) {
+            for (int dn = 1; dn <= num_ver; dn++) {
+                A[sn][dn] = scanner.nextInt();
+                if (sn == dn)
+                    A[sn][dn] = 0;
+                else if (A[sn][dn] == 0)
+                    A[sn][dn] = MAX_VALUE;
             }
         }
 
-        System.out.print("Enter source vertex: ");
-        int src = sc.nextInt();
+        System.out.print("Enter the source vertex: ");
+        int source = scanner.nextInt();
 
-        new BellmanFord().bellman(src, graph,n);
-}
+        ford b = new ford(num_ver);
+        b.BellmanFordEvaluation(source, A);
+        scanner.close();
+    }
 }
