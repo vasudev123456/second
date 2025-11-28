@@ -1,40 +1,62 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class crc1 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+
         System.out.print("Enter message bits: ");
-        String msg = sc.nextLine();
+        String message = sc.nextLine();
         System.out.print("Enter generator: ");
-        String gen = sc.nextLine();
+        String generator = sc.nextLine();
 
-        int m = msg.length(), g = gen.length();
-        int[] data = new int[m + g - 1], div = new int[g];
-        for (int i = 0; i < m; i++) data[i] = msg.charAt(i) - '0';
-        for (int i = 0; i < g; i++) div[i] = gen.charAt(i) - '0';
+        int[] data = new int[message.length() + generator.length() - 1];
+        int[] divisor = new int[generator.length()];
 
-        for (int i = 0; i < m; i++)
+        for (int i = 0; i < message.length(); i++)
+            data[i] = message.charAt(i) - '0';
+        for (int i = 0; i < generator.length(); i++)
+            divisor[i] = generator.charAt(i) - '0';
+
+        for (int i = 0; i < message.length(); i++)
             if (data[i] == 1)
-                for (int j = 0; j < g; j++)
-                    data[i + j] ^= div[j];
+                for (int j = 0; j < divisor.length; j++)
+                    data[i + j] ^= divisor[j];
 
-        System.out.print("Checksum code: ");
-        for (int i = 0; i < m; i++) System.out.print(msg.charAt(i));
-        for (int i = m; i < data.length; i++) System.out.print(data[i]);
+        System.out.print("The checksum code is: ");
+        for (int i = 0; i < message.length(); i++)
+            data[i] = message.charAt(i) - '0';
+        for (int i = 0; i < data.length; i++)
+            System.out.print(data[i]);
         System.out.println();
 
-        System.out.print("Enter received code: ");
-        String recv = sc.nextLine();
-        int[] recvData = new int[recv.length()];
-        for (int i = 0; i < recv.length(); i++) recvData[i] = recv.charAt(i) - '0';
+        System.out.print("Enter checksum code: ");
+        message = sc.nextLine();
+        System.out.print("Enter generator: ");
+        generator = sc.nextLine();
 
-        for (int i = 0; i < recv.length() - g + 1; i++)
-            if (recvData[i] == 1)
-                for (int j = 0; j < g; j++)
-                    recvData[i + j] ^= div[j];
+        data = new int[message.length() + generator.length() - 1];
+        divisor = new int[generator.length()];
+
+        for (int i = 0; i < message.length(); i++)
+            data[i] = message.charAt(i) - '0';
+        for (int i = 0; i < generator.length(); i++)
+            divisor[i] = generator.charAt(i) - '0';
+
+        for (int i = 0; i < message.length(); i++)
+            if (data[i] == 1)
+                for (int j = 0; j < divisor.length; j++)
+                    data[i + j] ^= divisor[j];
 
         boolean valid = true;
-        for (int bit : recvData) if (bit == 1) valid = false;
-        System.out.println(valid ? "Data stream is valid." : "CRC error occurred.");
-}
+        for (int i = 0; i < data.length; i++)
+            if (data[i] == 1) {
+                valid = false;
+                break;
+            }
+
+        if (valid)
+            System.out.println("Data stream is valid");
+        else
+            System.out.println("Data stream is invalid. CRC error occurred.");
+    }
 }
